@@ -33,3 +33,6 @@ python_files = "tests.py test_*.py *_tests.py"
 
 [tool.pylint.design]
 max-line-length = 120
+
+[tool.poetry.scripts]
+electricvehicle_charging_control = "electricvehicle_charging_control.cmdline:main"
