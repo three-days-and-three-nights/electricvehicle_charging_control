@@ -14,6 +14,8 @@ classifiers = [
 python = "^3.11"
 click = "^8.1.7"
 dynaconf = "^3.2.6"
+sqlalchemy = "^2.0.34"
+mysqlclient = "^2.2.4"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.17.4"
