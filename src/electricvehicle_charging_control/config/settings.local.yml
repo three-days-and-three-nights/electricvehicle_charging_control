@@ -1,7 +1,7 @@
 LOG_LEVEL: DEBUG
 DATABASE:
   DRIVER: mysql
-  NAME: example_blog
+  NAME: golden_arrow
   HOST: 127.0.0.1
   PORT: 3306
   USERNAME: root
