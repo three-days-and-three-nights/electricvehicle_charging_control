@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS vehicle_location_history (
     sequence_number VARCHAR(50) NOT NULL,             -- 外键，关联车辆信息表的ID
     latitude DECIMAL(10, 7) NOT NULL,                 -- 纬度
     longitude DECIMAL(10, 7) NOT NULL,                -- 经度
-    recorded_at DATETIME NOT NULL,                    -- 记录时间
+    recorded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,                    -- 记录时间
     FOREIGN KEY (sequence_number) REFERENCES vehicles(sequence_number) ON DELETE CASCADE,
     INDEX (sequence_number)                          -- 为外键字段创建索引
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -88,30 +88,30 @@ CREATE TABLE IF NOT EXISTS vehicle_battery (
     vehicle_battery_id INT AUTO_INCREMENT PRIMARY KEY, -- 电量记录的唯一标识符
     equipment_number VARCHAR(50) NOT NULL,             -- 外键，关联车辆信息表的设备id
     battery_level DECIMAL(5, 2) NOT NULL,              -- 电量水平（单位：%）
-    recorded_at DATETIME NOT NULL,                     -- 记录时间
+    recorded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,                     -- 记录时间
     FOREIGN KEY (equipment_number) REFERENCES vehicles(equipment_number) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 定时任务表
 CREATE TABLE IF NOT EXISTS scheduled_tasks (
     task_id INT AUTO_INCREMENT PRIMARY KEY,         -- 任务的唯一标识符
+    vehicle_id INT NOT NULL,                       -- 外键，关联车辆信息表的ID
     task_name VARCHAR(100) NOT NULL,                -- 任务名称
     task_type VARCHAR(50) NOT NULL,                 -- 任务类型
     schedule_expression VARCHAR(50) NOT NULL,       -- 定时调度表达式
     last_run_at DATETIME DEFAULT NULL,              -- 上次运行时间
-    status VARCHAR(50) DEFAULT 'pending'            -- 任务状态（默认为 'pending'）
+    status VARCHAR(50) DEFAULT 'pending',            -- 任务状态（默认为 'pending'）
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(vehicle_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 充电控制表
 CREATE TABLE IF NOT EXISTS charging_control (
     control_id INT AUTO_INCREMENT PRIMARY KEY,     -- 充电控制记录的唯一标识符
     vehicle_id INT NOT NULL,                       -- 外键，关联车辆信息表的ID
-    command VARCHAR(50) NOT NULL,                  -- 控制命令
     status VARCHAR(50) DEFAULT 'pending',          -- 控制状态（默认为 'pending'）
     issued_at DATETIME NOT NULL,                   -- 命令发出时间
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(vehicle_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 -- 推送消息表
 CREATE TABLE IF NOT EXISTS push_notifications (
