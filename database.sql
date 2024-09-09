@@ -6,24 +6,23 @@ CREATE DATABASE IF NOT EXISTS golden_arrow
 -- 选择数据库
 USE golden_arrow;
 
-DROP TABLE IF EXISTS `vehicles`;
 -- 车辆信息表
 CREATE TABLE IF NOT EXISTS vehicles (
     vehicle_id INT AUTO_INCREMENT PRIMARY KEY,         -- 车辆的唯一标识符
     car_name VARCHAR(100) DEFAULT NULL,                -- 车辆名称（可为空）
     electromobile_info_id VARCHAR(50) NOT NULL,        -- 电动汽车信息ID
-    sequence_number VARCHAR(50) NOT NULL,              -- 车辆序列号
-    equipment_number VARCHAR(50) NOT NULL,             -- 设备号
+    sequence_number VARCHAR(50) NOT NULL UNIQUE,       -- 车辆序列号（唯一）
+    equipment_number VARCHAR(50) NOT NULL UNIQUE,      -- 设备号（唯一）
     control_center_id VARCHAR(50) NOT NULL,            -- 中心控制ID
-    status VARCHAR(10) NOT NULL,                       -- 车辆状态，例如 '0' 表示正常
-    defense_status VARCHAR(10) NOT NULL,               -- 防御状态，例如 '0' 表示未启用
+    status VARCHAR(10) NOT NULL,                       -- 车辆状态
+    defense_status VARCHAR(10) NOT NULL,               -- 防御状态
     mac_address VARCHAR(50) DEFAULT NULL,              -- MAC 地址（可为空）
     bluetooth_name VARCHAR(50),                        -- 蓝牙名称
     contact_number VARCHAR(20) NOT NULL,               -- 联系电话号码
     equipment_version VARCHAR(20) NOT NULL,            -- 设备版本
     total_distance_meters DECIMAL(10, 1) DEFAULT 0.0,  -- 总行驶距离（单位：米）
-    share_key BOOLEAN NOT NULL                         -- 是否共享密钥，布尔值（true 或 false）
-);
+    share_key BOOLEAN NOT NULL                         -- 是否共享密钥
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 车辆历史位置表
 CREATE TABLE IF NOT EXISTS vehicle_location_history (
@@ -32,13 +31,14 @@ CREATE TABLE IF NOT EXISTS vehicle_location_history (
     latitude DECIMAL(10, 7) NOT NULL,                 -- 纬度
     longitude DECIMAL(10, 7) NOT NULL,                -- 经度
     recorded_at DATETIME NOT NULL,                    -- 记录时间
-    FOREIGN KEY (sequence_number) REFERENCES vehicles(sequence_number) ON DELETE CASCADE
+    FOREIGN KEY (sequence_number) REFERENCES vehicles(sequence_number) ON DELETE CASCADE,
+    INDEX (sequence_number)                          -- 为外键字段创建索引
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 骑行记录表
 CREATE TABLE IF NOT EXISTS cycling_records (
     cycling_record_id INT AUTO_INCREMENT PRIMARY KEY,  -- 自增主键，用于唯一标识每条骑行记录
-    cycling_report_id VARCHAR(50) NOT NULL,            -- 报告ID，用于关联骑行报告详情
+    cycling_report_id VARCHAR(50) NOT NULL UNIQUE,     -- 报告ID，用于关联骑行报告详情（唯一）
     sequence_number VARCHAR(50) NOT NULL,              -- 车辆序列号
     start_latitude DECIMAL(10, 7) NOT NULL,            -- 起始纬度
     start_longitude DECIMAL(10, 7) NOT NULL,           -- 起始经度
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS cycling_records (
     updated_by VARCHAR(50) DEFAULT NULL,               -- 更新者（可为空）
     updated_at DATETIME DEFAULT NULL,                  -- 更新时间
     FOREIGN KEY (sequence_number) REFERENCES vehicles(sequence_number) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 骑行报告详情表
 CREATE TABLE IF NOT EXISTS cycling_report_details (
