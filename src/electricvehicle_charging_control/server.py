@@ -21,6 +21,6 @@ class Server:
         self.init_app()
         uvicorn.run(
             app=self.app,
-            host=settings.HOST,
-            port=settings.PORT,
+            host=settings.SERVER.HOST,
+            port=settings.SERVER.PORT,
         )

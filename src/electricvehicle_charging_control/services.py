@@ -20,5 +20,5 @@ class BaseService(Generic[ModelType, CreateSchema, UpdateSchema]):
         return self.dao.get_by_id(session, pk)
 
 
-class ArticleService(BaseService[Vehicle, CreateSchema, UpdateSchema]):
+class VehicleService(BaseService[Vehicle, CreateSchema, UpdateSchema]):
     dao = VehicleDAO()

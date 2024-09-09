@@ -13,8 +13,8 @@ def main(ctx, version):
         click.echo(ctx.get_help())
 
 @main.command()
-@click.option('-h', '--host', show_default=True, help=f'Host IP. Default: {settings.HOST}')
-@click.option('-p', '--port', show_default=True, type=int, help=f'Port. Default: {settings.PORT}')
+@click.option('-h', '--host', show_default=True, help=f'Host IP. Default: {settings.SERVER.HOST}')
+@click.option('-p', '--port', show_default=True, type=int, help=f'Port. Default: {settings.SERVER.PORT}')
 @click.option('--level', help='Log level')
 def server(host, port, level):
     """Start server."""

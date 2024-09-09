@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from electricvehicle_charging_control.dependencies import CommonQueryParams, get_db
-from electricvehicle_charging_control.services import ArticleService
+from electricvehicle_charging_control.services import VehicleService
 
 router = APIRouter()
 
-_service = ArticleService()
+_service = VehicleService()
 
 @router.get('/vehicles')
 def get(
