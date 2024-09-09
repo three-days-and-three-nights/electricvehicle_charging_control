@@ -6,8 +6,6 @@ from sqlalchemy.ext.declarative import declarative_base
 
 
 class CustomBase:
-    """https://docs.sqlalchemy.org/en/13/orm/extensions/declarative/mixins.html"""
-
     __table_args__ = {
         'mysql_engine': 'InnoDB',
         'mysql_collate': 'utf8mb4_general_ci'
@@ -22,9 +20,9 @@ class Vehicle(BaseModel):
     """Vehicles table"""
     vehicle_id = Column(Integer, primary_key=True, autoincrement=True)  # 车辆的唯一标识符
     car_name = Column(String(100), nullable=True, default=None)  # 车辆名称（可为空）
-    electromobile_id = Column(String(50), nullable=False)  # 电动汽车信息ID
-    serial_number = Column(String(50), nullable=False)  # 车辆序列号
-    equipment_id = Column(String(50), nullable=False)  # 设备号
+    electromobile_info_id = Column(String(50), nullable=False)  # 电动汽车信息ID
+    sequence_number = Column(String(50), nullable=False)  # 车辆序列号
+    equipment_number = Column(String(50), nullable=False)  # 设备号
     control_center_id = Column(String(50), nullable=False)  # 中心控制ID
     status = Column(String(10), nullable=False)  # 车辆状态
     defense_status = Column(String(10), nullable=False)  # 防御状态

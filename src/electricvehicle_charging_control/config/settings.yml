@@ -8,3 +8,5 @@ DATABASE:
   PASSWORD: root
   QUERY:
     charset: utf8mb4
+HOST: 127.0.0.1
+PORT: 8000

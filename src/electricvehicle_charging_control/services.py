@@ -1,3 +1,4 @@
+"""Service"""
 from typing import Generic, List
 
 from sqlalchemy.orm import Session
@@ -5,6 +6,7 @@ from sqlalchemy.orm import Session
 from electricvehicle_charging_control.dao import VehicleDAO, BaseDAO
 from electricvehicle_charging_control.models import Vehicle
 from electricvehicle_charging_control.schemas import CreateSchema, ModelType, UpdateSchema
+
 
 class BaseService(Generic[ModelType, CreateSchema, UpdateSchema]):
     dao: BaseDAO
@@ -18,5 +20,5 @@ class BaseService(Generic[ModelType, CreateSchema, UpdateSchema]):
         return self.dao.get_by_id(session, pk)
 
 
-class VehicleService(BaseService[Vehicle, CreateSchema, UpdateSchema]):
+class ArticleService(BaseService[Vehicle, CreateSchema, UpdateSchema]):
     dao = VehicleDAO()

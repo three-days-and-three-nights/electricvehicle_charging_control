@@ -1,14 +1,18 @@
-from datetime import datetime
-from typing import Optional, TypeVar
-
+from typing import Optional,TypeVar
 from pydantic import BaseModel, constr
-from electricvehicle_charging_control.models import BaseModel
+from electricvehicle_charging_control.models import BaseModel as DBModel
 
-ModelType = TypeVar('ModelType', bound=BaseModel)
+ModelType = TypeVar('ModelType', bound=DBModel)
 CreateSchema = TypeVar('CreateSchema', bound=BaseModel)
 UpdateSchema = TypeVar('UpdateSchema', bound=BaseModel)
 
-class VehicleBase(BaseModel):
+# 定义主键字段的Mixin
+class InDBMixin(BaseModel):
+    class Config:
+        orm_mode = True
+
+# 车辆基础模型
+class BaseVehicle(BaseModel):
     car_name: Optional[constr(max_length=100)] = None
     electromobile_info_id: constr(max_length=50)
     sequence_number: constr(max_length=50)
@@ -23,26 +27,14 @@ class VehicleBase(BaseModel):
     total_distance_meters: float = 0.0
     share_key: bool
 
-class VehicleInDB(VehicleBase):
-    vehicle_id: int
+# 车辆模型，继承InDBMixin并指定主键字段名称
+class VehicleSchema(BaseVehicle, InDBMixin):
+    vehicle_id: int  # 指定正确的主键字段名称
 
-    class Config:
-        orm_mode = True
-
-class CreateVehicleSchema(VehicleBase):
+# 创建车辆时使用的模型
+class CreateVehicleSchema(BaseVehicle):
     pass
 
-class UpdateVehicleSchema(BaseModel):
-    car_name: Optional[constr(max_length=100)] = None
-    electromobile_info_id: Optional[constr(max_length=50)] = None
-    sequence_number: Optional[constr(max_length=50)] = None
-    equipment_number: Optional[constr(max_length=50)] = None
-    control_center_id: Optional[constr(max_length=50)] = None
-    status: Optional[constr(max_length=10)] = None
-    defense_status: Optional[constr(max_length=10)] = None
-    mac_address: Optional[constr(max_length=50)] = None
-    bluetooth_name: Optional[constr(max_length=50)] = None
-    contact_number: Optional[constr(max_length=20)] = None
-    equipment_version: Optional[constr(max_length=20)] = None
-    total_distance_meters: Optional[float] = None
-    share_key: Optional[bool] = None
+# 更新车辆时使用的模型
+class UpdateVehicleSchema(BaseVehicle):
+    pass
